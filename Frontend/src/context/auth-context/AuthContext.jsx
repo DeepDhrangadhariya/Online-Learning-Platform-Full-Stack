@@ -1,4 +1,4 @@
-import { initialSignInFormData, initialSignUpFormData } from "@/components/config/SignUpFormControls";
+import { initialSignInFormData, initialSignUpFormData } from "@/config/SignUpFormControls";
 import { checkAuthService, loginService, registerService } from "@/services/services";
 import { createContext, useEffect, useState } from "react";
 
@@ -65,7 +65,8 @@ export default function AuthProvider({children}) {
             signUpFormData,
             setSignUpFormData,
             handleRegisterUser,
-            handleLoginUser
+            handleLoginUser,
+            authState
         }}>
             {children}
         </AuthContext.Provider>

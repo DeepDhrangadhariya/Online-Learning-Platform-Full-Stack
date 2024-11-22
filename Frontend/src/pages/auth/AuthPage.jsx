@@ -1,5 +1,5 @@
 import CommonForm from '@/components/common-form/CommonForm'
-import { signInFormControls, signUpFormControls } from '@/components/config/SignUpFormControls'
+import { signInFormControls, signUpFormControls } from '@/config/SignUpFormControls'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { AuthContext } from '@/context/auth-context/AuthContext'
