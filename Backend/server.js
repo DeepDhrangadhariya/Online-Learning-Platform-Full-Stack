@@ -7,13 +7,16 @@ const MONGO_URL = process.env.MONGO_URL
 const CLIENT_URL = process.env.CLIENT_URL
 const db = require("./config/database")
 
-cors({
+app.use(cors({
     origin: CLIENT_URL,
     methods: ["GET", "POST", "DELETE", "PUT"],
     allowedHeaders: ["Content-Type", "Authorization"]
-})
+}))
 
 app.use(express.json())
+
+app.use('/auth', require("./routes/auth/authRoutes"))
+
 app.use((err,req,res,next) => {
     console.log(err.stack)
     res.status(500).json({

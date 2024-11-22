@@ -8,6 +8,7 @@ function FormControls({formControls = [], formData, setFormData}) {
 
     function renderComponentByType(getControlItem) {
         let element = null
+        const currentValue = formData[getControlItem.name] || ''
 
         switch (getControlItem.componentType) {
             case 'input':
@@ -16,11 +17,22 @@ function FormControls({formControls = [], formData, setFormData}) {
                 name={getControlItem.name}
                 placeholder={getControlItem.placeholder}
                 type={getControlItem.type}
+                value={currentValue}
+                onChange={(event) => setFormData({
+                    ...formData,
+                    [getControlItem.name]: event.target.value
+                })}
                 />
                 break;
 
             case 'select':
-                element = <Select>
+                element = <Select
+                value={currentValue}
+                onValueChange={(value) => setFormData({
+                    ...formData,
+                    [getControlItem.name]: value
+                })}
+                >
                     <SelectTrigger className="w-full">
                         <SelectValue placeholder={getControlItem.label} />
                     </SelectTrigger>
@@ -41,6 +53,11 @@ function FormControls({formControls = [], formData, setFormData}) {
                 id={getControlItem.name}
                 name={getControlItem.name}
                 placeholder={getControlItem.placeholder}
+                value={currentValue}
+                onChange={(event) => setFormData({
+                    ...formData,
+                    [getControlItem.name]: event.target.value
+                })}
                 />
             default:
                 element = <Input
@@ -48,6 +65,11 @@ function FormControls({formControls = [], formData, setFormData}) {
                 name={getControlItem.name}
                 placeholder={getControlItem.placeholder}
                 type={getControlItem.type}
+                value={currentValue}
+                onChange={(event) => setFormData({
+                    ...formData,
+                    [getControlItem.name]: event.target.value
+                })}
                 />
                 break;
         }
