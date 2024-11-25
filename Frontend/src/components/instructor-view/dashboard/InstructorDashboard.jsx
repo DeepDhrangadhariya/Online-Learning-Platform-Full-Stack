@@ -1,9 +1,9 @@
 import React from 'react'
 
-function InstructorDashboard() {
+const InstructorDashboard = () => {
   return (
     <div>
-      InstructorDashboard
+      Instructor Dashboard
     </div>
   )
 }

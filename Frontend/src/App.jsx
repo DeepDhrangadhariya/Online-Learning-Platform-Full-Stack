@@ -4,9 +4,11 @@ import AuthPage from './pages/auth/AuthPage'
 import ProtectedRoutes from './components/protected-routes/ProtectedRoutes'
 import { useContext } from 'react'
 import { AuthContext } from './context/auth-context/AuthContext'
-import InstructorDashboard from './pages/instructor/InstructorDashboard'
+import InstructorDashboardPage from './pages/instructor/InstructorDashboardPage'
 import StudentLayout from './components/student-view/StudentLayout'
 import StudentHomePage from './pages/student/home/StudentHomePage'
+import NotFoundPage from './pages/not-found/NotFoundPage'
+import AddNewCoursePage from './pages/instructor/AddNewCoursePage'
 
 function App() {
 
@@ -29,7 +31,17 @@ function App() {
         path='/instructor'
         element={
           <ProtectedRoutes
-          element={<InstructorDashboard/>}
+          element={<InstructorDashboardPage/>}
+          authenticated={authState?.authenticate}
+          user={authState?.user}
+          />
+        }
+        />
+        <Route
+        path='instructor/create-new-course'
+        element={
+          <ProtectedRoutes
+          element={<AddNewCoursePage />}
           authenticated={authState?.authenticate}
           user={authState?.user}
           />
@@ -48,6 +60,7 @@ function App() {
           <Route path='' element={<StudentHomePage/>} />
           <Route path='/home' element={<StudentHomePage/>} />
         </Route>
+        <Route path='*' element={<NotFoundPage />} />
       </Routes>
       
     </>
