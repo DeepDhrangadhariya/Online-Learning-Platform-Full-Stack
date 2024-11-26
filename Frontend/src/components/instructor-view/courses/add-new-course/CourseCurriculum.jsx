@@ -4,12 +4,18 @@ import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
 import { courseCurriculumInitialFormData } from '@/config/Config'
 import { instructorContext } from '@/context/instructor-context/InstructorContext'
+import { mediaUploadService } from '@/services/services'
 import { Label } from '@radix-ui/react-dropdown-menu'
 import React, { useContext } from 'react'
 
 const CourseCurriculum = () => {
 
-    const {courseCurriculumFormData, setCourseCurriculumFormData} = useContext(instructorContext)
+    const {
+        courseCurriculumFormData,
+        setCourseCurriculumFormData,
+        mediaUploadProgress,
+        setMediaUploadProgress
+    } = useContext(instructorContext)
 
     function handleNewLecture() {
         setCourseCurriculumFormData([
@@ -19,7 +25,60 @@ const CourseCurriculum = () => {
             }
         ])
     }
-    // console.log(courseCurriculumFormData)
+
+    function handleCourseTitleChange(event, currentIndex) {
+        let copyCourseCurriculumFormData = [...courseCurriculumFormData]
+        // console.log(copyCourseCurriculumFormData)
+        copyCourseCurriculumFormData[currentIndex] = {
+            ...copyCourseCurriculumFormData[currentIndex],
+            title: event.target.value
+        }
+
+        setCourseCurriculumFormData(copyCourseCurriculumFormData)
+    }
+
+    function handleFreePreviewChange(currentValue, currentIndex) {
+        // console.log(currentValue, currentIndex)
+        let copyCourseCurriculumFormData = [...courseCurriculumFormData]
+        copyCourseCurriculumFormData[currentIndex] = {
+            ...copyCourseCurriculumFormData[currentIndex],
+            freePreview: currentValue
+        }
+        // console.log(copyCourseCurriculumFormData)
+        setCourseCurriculumFormData(copyCourseCurriculumFormData)
+    }
+
+    async function handleSingleLectureUpload(event, currentIndex) {
+        // console.log(event.target.files)
+        const selectedFiles= event.target.files[0]
+
+        if(selectedFiles) {
+            const videoFormData = new FormData()
+            videoFormData.append('file', selectedFiles)
+            try {
+                setMediaUploadProgress(true)
+                const response = await mediaUploadService(videoFormData)
+
+                if(response.success) {
+                    let copyCourseCurriculumFormData = [...courseCurriculumFormData]
+                    copyCourseCurriculumFormData[currentIndex] = {
+                        ...copyCourseCurriculumFormData[currentIndex],
+                        videoUrl: response?.data?.url,
+                        public_id: response?.data?.public_id
+                    }
+                    setCourseCurriculumFormData(copyCourseCurriculumFormData)
+                    setMediaUploadProgress(false)
+                }
+
+                // console.log(response, 'response')
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+    }
+
+    console.log(courseCurriculumFormData)
 
   return (
     <Card>
@@ -38,10 +97,13 @@ const CourseCurriculum = () => {
                                 name={`title-${index + 1}`}
                                 placeholder="Enter Lecture Title"
                                 className="max-w-96"
+                                onChange={event=> handleCourseTitleChange(event, index)}
+                                value={courseCurriculumFormData[index]?.title}
                                 />
                                 <div className='flex items-center space-x-2'>
                                     <Switch
-                                    checked={false}
+                                    onCheckedChange={(value)=> handleFreePreviewChange(value, index)}
+                                    checked={courseCurriculumFormData[index]?.freePreview}
                                     id={`freePreview-${index + 1}`}
                                     />
                                     <Label htmlFor={`freePreview-${index + 1}`} className="cursor-pointer">
@@ -53,6 +115,7 @@ const CourseCurriculum = () => {
                                 <Input
                                 type="file"
                                 accept="video/*"
+                                onChange={event=> handleSingleLectureUpload(event, index)}
                                 className="mb-4"
                                 />
                             </div>

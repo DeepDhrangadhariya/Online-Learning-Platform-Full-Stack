@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors")
 const port = process.env.PORT
 const app = express()
+
 const MONGO_URL = process.env.MONGO_URL
 const CLIENT_URL = process.env.CLIENT_URL
 const db = require("./config/database")
@@ -16,6 +17,7 @@ app.use(cors({
 app.use(express.json())
 
 app.use('/auth', require("./routes/auth/authRoutes"))
+app.use('/media', require('./routes/instructor/media'))
 
 app.use((err,req,res,next) => {
     console.log(err.stack)
