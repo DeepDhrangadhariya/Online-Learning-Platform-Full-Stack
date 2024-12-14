@@ -12,57 +12,57 @@ import AddNewCoursePage from './pages/instructor/AddNewCoursePage'
 
 function App() {
 
-  const {authState} = useContext(AuthContext)
+  const { authState } = useContext(AuthContext)
 
   return (
     <>
       <Routes>
         <Route
-        path='/auth'
-        element={
-          <ProtectedRoutes
-          element={<AuthPage/>}
-          authenticated={authState?.authenticate}
-          user={authState?.user}
-          />
-        }
+          path='/auth'
+          element={
+            <ProtectedRoutes
+              element={<AuthPage />}
+              authenticated={authState?.authenticate}
+              user={authState?.user}
+            />
+          }
         />
         <Route
-        path='/instructor'
-        element={
-          <ProtectedRoutes
-          element={<InstructorDashboardPage/>}
-          authenticated={authState?.authenticate}
-          user={authState?.user}
-          />
-        }
+          path='/instructor'
+          element={
+            <ProtectedRoutes
+              element={<InstructorDashboardPage />}
+              authenticated={authState?.authenticate}
+              user={authState?.user}
+            />
+          }
         />
         <Route
-        path='instructor/create-new-course'
-        element={
-          <ProtectedRoutes
-          element={<AddNewCoursePage />}
-          authenticated={authState?.authenticate}
-          user={authState?.user}
-          />
-        }
+          path='instructor/create-new-course'
+          element={
+            <ProtectedRoutes
+              element={<AddNewCoursePage />}
+              authenticated={authState?.authenticate}
+              user={authState?.user}
+            />
+          }
         />
         <Route
-        path='/'
-        element={
-          <ProtectedRoutes
-          element={<StudentLayout/>}
-          authenticated={authState?.authenticate}
-          user={authState?.user}
-          />
-        }
+          path='/'
+          element={
+            <ProtectedRoutes
+              element={<StudentLayout />}
+              authenticated={authState?.authenticate}
+              user={authState?.user}
+            />
+          }
         >
-          <Route path='' element={<StudentHomePage/>} />
-          <Route path='/home' element={<StudentHomePage/>} />
+          <Route path='' element={<StudentHomePage />} />
+          <Route path='/home' element={<StudentHomePage />} />
         </Route>
         <Route path='*' element={<NotFoundPage />} />
       </Routes>
-      
+
     </>
   )
 }

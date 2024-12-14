@@ -160,7 +160,7 @@ export const courseLandingInitialFormData = {
     pricing: '',
     objectives: '',
     welcomeMessage: '',
-    iamge: ''
+    image: ''
 }
 
 export const courseCurriculumInitialFormData = [

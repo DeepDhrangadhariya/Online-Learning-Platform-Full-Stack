@@ -29,7 +29,7 @@ const CourseSettings = () => {
         setMediaUploadProgress(true)
 
         const response = await mediaUploadService(imageFormData, setMediaUploadProgressPercentage)
-        console.log(response, 'response')
+        // console.log(response, 'response')
 
         if(response.success) {
           setCourseLandingFormData({
@@ -45,7 +45,7 @@ const CourseSettings = () => {
     }
   }
 
-  console.log(courseLandingFormData)
+  // console.log(courseLandingFormData)
 
   return (
     <Card>

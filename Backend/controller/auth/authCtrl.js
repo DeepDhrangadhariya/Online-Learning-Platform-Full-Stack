@@ -27,10 +27,10 @@ module.exports.registerUser = async (req, res) => {
     } catch (error) {
         return res.status(400).json({
             success: false,
-            message: 'Error Occured While Registering User',
+            message: 'Error Occured While Registering User!',
             error: error
         })
-        console.log("Error Occured While Registering User, ", error)
+        console.log("Error Occured While Registering User!, ", error)
     }
 }
 
@@ -44,7 +44,7 @@ module.exports.loginUser = async (req, res) => {
         if(!checkUser || !hashPassword) {
             return res.status(401).json({
                 success: false,
-                message: 'Invalid Email Or Password'
+                message: 'Invalid Email Or Password!'
             })
         }
 
@@ -71,8 +71,9 @@ module.exports.loginUser = async (req, res) => {
     } catch (error) {
         return res.status(400).json({
             success: false,
-            message: 'Error Occured While Login User',
+            message: 'Error Occured While Login User!',
             error: error
         })
+        console.log("Error Occured While Login User!, ", error)
     }
 }
