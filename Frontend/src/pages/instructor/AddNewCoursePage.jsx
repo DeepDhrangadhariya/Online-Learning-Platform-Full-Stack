@@ -7,9 +7,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { courseCurriculumInitialFormData, courseLandingInitialFormData } from '@/config/Config'
 import { AuthContext } from '@/context/auth-context/AuthContext'
 import { instructorContext } from '@/context/instructor-context/InstructorContext'
-import { addNewCourseService } from '@/services/services'
-import React, { useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { addNewCourseService, fetchInstructorCourseDetailsService, updateCourseByIdService } from '@/services/services'
+import React, { useContext, useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const AddNewCoursePage = () => {
 
@@ -17,12 +17,18 @@ const AddNewCoursePage = () => {
     courseCurriculumFormData,
     courseLandingFormData,
     setCourseLandingFormData,
-    setCourseCurriculumFormData
+    setCourseCurriculumFormData,
+    currentEditedCourseId,
+    setCurrentEditedCourseId
   } = useContext(instructorContext)
 
   const { authState } = useContext(AuthContext)
   
   const navigate = useNavigate()
+
+  const params = useParams()
+
+  console.log(params)
 
   function isEmpty(value) {
     if (Array.isArray(value)) {
@@ -66,11 +72,15 @@ const AddNewCoursePage = () => {
       isPublised: true,
     }
 
-    const response = await addNewCourseService(courseFinalFormdata)
+    const response =
+      currentEditedCourseId !== null ?
+      await updateCourseByIdService(currentEditedCourseId, courseFinalFormdata) :
+      await addNewCourseService(courseFinalFormdata)
 
     if (response?.success) {
       setCourseLandingFormData(courseLandingInitialFormData)
       setCourseCurriculumFormData(courseCurriculumInitialFormData)
+      setCurrentEditedCourseId(null)
 
       if (window.history.length > 1) {
         navigate(-1)
@@ -82,9 +92,37 @@ const AddNewCoursePage = () => {
       // navigate('/instructor')
       // navigate(back)
     }
-    console.log(window.history)
+    // console.log(window.history)
     console.log("CourseFinalFormData, ", courseFinalFormdata)
   }
+
+  async function fetchCurrentCourseDetails() {
+    const response = await fetchInstructorCourseDetailsService(currentEditedCourseId)
+
+    if (response?.success) {
+      const setCourseFormData = Object.keys(courseLandingInitialFormData).reduce((acc, key) => {
+        acc[key] = response?.data[key] || courseLandingInitialFormData[key]
+
+        return acc
+      }, {})
+
+      console.log(setCourseFormData, response?.data)
+
+      setCourseLandingFormData(setCourseFormData)
+      setCourseCurriculumFormData(response?.data?.curriculum)
+    }
+
+    console.log(response, "Response")
+  }
+
+  useEffect(() => {
+    // console.log(currentEditedCourseId)
+    if(currentEditedCourseId !== null) fetchCurrentCourseDetails()
+  },[currentEditedCourseId])
+
+  useEffect(() => {
+    if(params?.courseId) setCurrentEditedCourseId(params?.courseId)
+  },[params?.courseId])
 
   return (
     <div className='container mx-auto p-4'>

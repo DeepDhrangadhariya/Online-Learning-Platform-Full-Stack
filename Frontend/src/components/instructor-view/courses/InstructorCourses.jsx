@@ -1,13 +1,17 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { courseCurriculumInitialFormData, courseLandingInitialFormData } from '@/config/Config'
+import { instructorContext } from '@/context/instructor-context/InstructorContext'
 import { Edit, Trash2 } from 'lucide-react'
-import React from 'react'
+import React, { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const InstructorCourses = ({ listOfCourses }) => {
 
     const navigate = useNavigate()
+
+    const {setCurrentEditedCourseId, setCourseLandingFormData, setCourseCurriculumFormData} = useContext(instructorContext)
 
     return (
         <Card>
@@ -46,6 +50,12 @@ const InstructorCourses = ({ listOfCourses }) => {
                                                 <Button
                                                     variant="ghost"
                                                     size="sm"
+                                                    onClick={() => {
+                                                        setCurrentEditedCourseId(null)
+                                                        setCourseLandingFormData(courseLandingInitialFormData)
+                                                        setCourseCurriculumFormData(courseCurriculumInitialFormData)
+                                                        navigate(`/instructor/edit-course/${course?._id}`)
+                                                    }}
                                                 >
                                                     <Edit className='h-6 w-6' />
                                                 </Button>
