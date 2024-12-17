@@ -13,7 +13,7 @@ const uploadMediaToCloudianary = async (filepath) => {
         })
         return result
     } catch (error) {
-        console.log(error)
+        console.log("Error Uploading To Cloudinary, ", error)
         throw new Error('Error Uploading To Cloudinary')
     }
 }
@@ -22,7 +22,7 @@ const deleteMediaFromCloudinary = async(publicId)=> {
     try {
         await cloudinary.uploader.destroy(publicId)
     } catch (error) {
-        console.log(error)
+        console.log("Failed To Delete Assest From Cloudinary, ", error)
         throw new Error('Failed To Delete Assest From Cloudinary')
     }
 }
