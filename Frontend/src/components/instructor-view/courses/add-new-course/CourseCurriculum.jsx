@@ -137,13 +137,13 @@ const CourseCurriculum = () => {
             setMediaUploadProgress(true)
             const response = await mediaBulkUploadService(bulkFormData, setMediaUploadProgressPercentage)
 
-            console.log("Bulk Response", response)
+            // console.log("Bulk Response", response)
 
             if (response?.success) {
                 let copyCourseCurriculumFormData = areAllCourseCurriculumFormDataObjectsEmpty(courseCurriculumFormData)
                     ? [] :
                     [...courseCurriculumFormData]
-                
+
                 copyCourseCurriculumFormData = [
                     ...copyCourseCurriculumFormData,
                     ...response?.data.map((item, index) => ({
@@ -158,14 +158,29 @@ const CourseCurriculum = () => {
                 setMediaUploadProgress(false)
 
 
-                console.log(courseCurriculumFormData, "copyCourseCurriculumFormData", copyCourseCurriculumFormData)
+                // console.log(courseCurriculumFormData, "copyCourseCurriculumFormData", copyCourseCurriculumFormData)
             }
 
         } catch (error) {
             console.log(error)
         }
 
-        console.log(selectedFiles)
+        // console.log(selectedFiles)
+    }
+
+    async function handleDeleteLecture(currentIndex) {
+        let copyCourseCurriculumFormData = [...courseCurriculumFormData]
+        const getCurrentSelectedVideoPublicId = copyCourseCurriculumFormData[currentIndex].public_id
+
+        const response = await mediaDeleteService(getCurrentSelectedVideoPublicId)
+
+        if (response?.success) {
+            copyCourseCurriculumFormData = copyCourseCurriculumFormData.filter((_, index) => index !== currentIndex)
+
+            setCourseCurriculumFormData(copyCourseCurriculumFormData)
+        }
+
+        // console.log("copyCourseCurriculumFormData, ", copyCourseCurriculumFormData[currentIndex])
     }
 
     // console.log(courseCurriculumFormData)
@@ -239,7 +254,7 @@ const CourseCurriculum = () => {
                                                     height='200px'
                                                 />
                                                 <Button onClick={() => handleReplaceVideo(index)} >Replace Video</Button>
-                                                <Button className="bg-red-900">Delete Lecture</Button>
+                                                <Button onClick={() => handleDeleteLecture(index)} className="bg-red-900">Delete Lecture</Button>
                                             </div> :
                                             <Input
                                                 type="file"

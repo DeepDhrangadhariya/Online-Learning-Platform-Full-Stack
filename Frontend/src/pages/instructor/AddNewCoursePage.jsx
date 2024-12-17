@@ -28,7 +28,7 @@ const AddNewCoursePage = () => {
 
   const params = useParams()
 
-  console.log(params)
+  // console.log(params)
 
   function isEmpty(value) {
     if (Array.isArray(value)) {
@@ -93,7 +93,7 @@ const AddNewCoursePage = () => {
       // navigate(back)
     }
     // console.log(window.history)
-    console.log("CourseFinalFormData, ", courseFinalFormdata)
+    // console.log("CourseFinalFormData, ", courseFinalFormdata)
   }
 
   async function fetchCurrentCourseDetails() {
@@ -106,13 +106,13 @@ const AddNewCoursePage = () => {
         return acc
       }, {})
 
-      console.log(setCourseFormData, response?.data)
+      // console.log(setCourseFormData, response?.data)
 
       setCourseLandingFormData(setCourseFormData)
       setCourseCurriculumFormData(response?.data?.curriculum)
     }
 
-    console.log(response, "Response")
+    // console.log(response, "Response")
   }
 
   useEffect(() => {
