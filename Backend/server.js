@@ -19,6 +19,7 @@ app.use(express.json())
 app.use('/auth', require("./routes/auth/authRoutes"))
 app.use('/media', require('./routes/instructor/media'))
 app.use('/instructor/course', require('./routes/instructor/course'))
+app.use('/student/course', require('./routes/student/course'))
 
 app.use((err,req,res,next) => {
     console.log(err.stack)

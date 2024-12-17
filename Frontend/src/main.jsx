@@ -5,12 +5,15 @@ import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom'
 import AuthProvider from './context/auth-context/AuthContext'
 import InstructorProvider from './context/instructor-context/InstructorContext'
+import StudentProvider from './context/student-context/StudentContext'
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
     <AuthProvider>
       <InstructorProvider>
-        <App />
+        <StudentProvider>
+          <App />
+        </StudentProvider>
       </InstructorProvider>
     </AuthProvider>
   </BrowserRouter>,
