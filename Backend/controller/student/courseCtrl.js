@@ -3,15 +3,51 @@ const courseSchema = require('../../model/courseSchema')
 module.exports.getAllStudentViewCourses = async (req, res) => {
     try {
 
-        const coursesList = await courseSchema.find({})
+        const { category = [],
+            level = [],
+            primaryLanguage = [],
+            sortBy = "price-lowtohigh",
+        } = req.query
 
-        if (coursesList.length === 0) {
-            return res.status((404).json({
-                success: false,
-                message: "No Course Found",
-                data: []
-            }))
+        let filters = {}
+
+        if (category.length) {
+            filters.category = { $in: category.split(',') }
         }
+
+        if (level.length) {
+            filters.level = { $in: level.split(',') }
+        }
+
+        if (primaryLanguage.length) {
+            filters.primaryLanguage = { $in: primaryLanguage.split(',') }
+        }
+
+        const sortParams = {}
+
+        switch (sortBy) {
+            case 'price-lowtohigh':
+                sortParams.pricing = 1
+                break;
+            
+            case 'price-hightolow':
+                sortParams.pricing = -1
+                break;
+            
+            case 'title-atoz':
+                sortParams.title = 1
+                break;
+            
+            case 'title-ztoa':
+                sortParams.title = -1
+                break;
+        
+            default:
+                sortParams.pricing = 1
+                break;
+        }
+
+        const coursesList = await courseSchema.find(filters).sort(sortParams)
 
         res.status(200).json({
             success: true,

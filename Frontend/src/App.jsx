@@ -9,6 +9,7 @@ import StudentLayout from './components/student-view/StudentLayout'
 import StudentHomePage from './pages/student/home/StudentHomePage'
 import NotFoundPage from './pages/not-found/NotFoundPage'
 import AddNewCoursePage from './pages/instructor/AddNewCoursePage'
+import StudentViewCoursesPage from './pages/student/courses/StudentViewCoursesPage'
 
 function App() {
 
@@ -38,7 +39,7 @@ function App() {
           }
         />
         <Route
-          path='instructor/create-new-course'
+          path='/instructor/create-new-course'
           element={
             <ProtectedRoutes
               element={<AddNewCoursePage />}
@@ -48,7 +49,7 @@ function App() {
           }
         />
         <Route
-          path='instructor/edit-course/:courseId'
+          path='/instructor/edit-course/:courseId'
           element={
             <ProtectedRoutes
               element={<AddNewCoursePage />}
@@ -68,7 +69,8 @@ function App() {
           }
         >
           <Route path='' element={<StudentHomePage />} />
-          <Route path='/home' element={<StudentHomePage />} />
+          <Route path='home' element={<StudentHomePage />} />
+          <Route path='courses' element={<StudentViewCoursesPage />} />
         </Route>
         <Route path='*' element={<NotFoundPage />} />
       </Routes>

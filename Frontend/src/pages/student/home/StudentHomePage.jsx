@@ -16,7 +16,7 @@ function StudentHomePage() {
       setStudentViewCoursesList(response?.data)
     }
 
-    console.log(response)
+    // console.log(response)
   }
   
   useEffect(() => {
@@ -75,7 +75,7 @@ function StudentHomePage() {
                   <p className='font-bold text-[16px}'>${courseItem?.pricing}</p>
                 </div>
               </div>) :
-              <h1>No Courses Found</h1>
+              <h1 className="font-extrabold text-4xl">No Courses Found</h1>
           }
         </div>
       </section>
