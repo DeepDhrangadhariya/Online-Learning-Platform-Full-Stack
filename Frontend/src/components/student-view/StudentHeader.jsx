@@ -21,7 +21,7 @@ const StudentHeader = () => {
             <div className="flex items-center space-x-4">
                 <Link to='/home' className="flex items-center hover:text-black">
                     <GraduationCap className="h-8 w-8 mr-4" />
-                    <span className="font-extrabold md:text-xl text-[14px]">LMS LEARN</span>
+                    <span className="font-extrabold md:text-xl text-[14px]">Online Learning Platform</span>
                 </Link>
                 <div className="flex items-center space-x-1">
                     <Button variant="ghost" onClick={() => navigate('/courses')} className="text-[14px] md:text-[16px] font-medium">
