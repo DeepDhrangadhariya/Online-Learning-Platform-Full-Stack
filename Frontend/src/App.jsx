@@ -11,6 +11,8 @@ import NotFoundPage from './pages/not-found/NotFoundPage'
 import AddNewCoursePage from './pages/instructor/AddNewCoursePage'
 import StudentViewCoursesPage from './pages/student/courses/StudentViewCoursesPage'
 import StudentViewCourseDetailsPage from './pages/student/course-details/StudentViewCourseDetailsPage'
+import PaypalPaymentReturnPage from './pages/student/payment-return/PaypalPaymentReturnPage'
+import StudentCoursesPage from './pages/student/student-courses/StudentCoursesPage'
 
 function App() {
 
@@ -73,6 +75,8 @@ function App() {
           <Route path='home' element={<StudentHomePage />} />
           <Route path='courses' element={<StudentViewCoursesPage />} />
           <Route path='courses/details/:id' element={<StudentViewCourseDetailsPage />} />
+          <Route path='payment-return' element={<PaypalPaymentReturnPage />} />
+          <Route path='student-courses' element={<StudentCoursesPage />} />
         </Route>
         <Route path='*' element={<NotFoundPage />} />
       </Routes>
