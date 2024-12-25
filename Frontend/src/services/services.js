@@ -102,3 +102,15 @@ export async function captureAndFinalizePayemntService(paymentId, payerId, order
 
     return data
 }
+
+export async function fetchStudentBoughtCoursesService(studentId) {
+    const { data } = await axiosInstance.get(`/student/courses-bought/get/${studentId}`)
+
+    return data
+}
+
+export async function checkCoursePurchaseInfoService(CourseId, studentId) {
+    const { data } = await axiosInstance.get(`/student/course/purchase-info/${CourseId}/${studentId}`)
+
+    return data
+}

@@ -1,4 +1,5 @@
 const courseSchema = require('../../model/courseSchema')
+const studentCoursesShema = require('../../model/studentCoursesSchema')
 
 module.exports.getAllStudentViewCourses = async (req, res) => {
     try {
@@ -29,19 +30,19 @@ module.exports.getAllStudentViewCourses = async (req, res) => {
             case 'price-lowtohigh':
                 sortParams.pricing = 1
                 break;
-            
+
             case 'price-hightolow':
                 sortParams.pricing = -1
                 break;
-            
+
             case 'title-atoz':
                 sortParams.title = 1
                 break;
-            
+
             case 'title-ztoa':
                 sortParams.title = -1
                 break;
-        
+
             default:
                 sortParams.pricing = 1
                 break;
@@ -83,6 +84,33 @@ module.exports.getStudentViewCourseDetails = async (req, res) => {
             success: true,
             message: "Course Details Found",
             data: courseDetails
+        })
+
+    } catch (error) {
+        console.log("Error On Geting Course Details!, ", error)
+        res.status(500).json({
+            success: false,
+            message: "Error On Geting Course Details!",
+            error: error
+        })
+    }
+}
+
+module.exports.checkCoursePurchaseInfo = async (req, res) => {
+    try {
+
+        const { id, studentId } = req.params
+
+        const studentCourses = await studentCoursesShema.findOne({
+            userId: studentId
+        })
+
+        const ifStudentAlreadyBoughtCurrentCourse = studentCourses.courses.findIndex(item => item.courseId === id) > -1
+
+        res.status(200).json({
+            success: true,
+            message: "Course Details Found",
+            data: ifStudentAlreadyBoughtCurrentCourse
         })
 
     } catch (error) {

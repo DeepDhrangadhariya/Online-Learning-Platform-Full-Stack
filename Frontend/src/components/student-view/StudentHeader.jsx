@@ -31,7 +31,7 @@ const StudentHeader = () => {
             </div>
             <div className="flex items-center space-x-4">
                 <div className="flex gap4 items-center">
-                    <div className="flex items-center gap-3">
+                    <div onClick={()=>navigate('/student-courses')} className="flex cursor-pointer items-center gap-3">
                         <span className="font-extrabold md:text-xl text-[14px]">My Courses</span>
                         <TvMinimalPlay className="w-8 h-8 cursor-pointer" />
                     </div>

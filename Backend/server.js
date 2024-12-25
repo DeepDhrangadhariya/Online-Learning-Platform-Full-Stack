@@ -21,6 +21,7 @@ app.use('/media', require('./routes/instructor/media'))
 app.use('/instructor/course', require('./routes/instructor/course'))
 app.use('/student/course', require('./routes/student/course'))
 app.use('/student/order', require('./routes/student/order'))
+app.use('/student/courses-bought', require('./routes/student/studentCourses'))
 
 app.use((err,req,res,next) => {
     console.log(err.stack)

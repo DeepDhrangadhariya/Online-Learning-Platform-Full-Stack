@@ -5,8 +5,9 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenu
 import { Label } from '@/components/ui/label'
 import { Skeleton } from '@/components/ui/skeleton'
 import { filterOptions, sortOptions } from '@/config/Config'
+import { AuthContext } from '@/context/auth-context/AuthContext'
 import { StudentContext } from '@/context/student-context/StudentContext'
-import { fetchStudentViewCourseListService } from '@/services/services'
+import { checkCoursePurchaseInfoService, fetchStudentViewCourseListService } from '@/services/services'
 import { ArrowUpDownIcon } from 'lucide-react'
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -36,6 +37,8 @@ const StudentViewCoursesPage = () => {
   const { studentViewCoursesList, setStudentViewCoursesList, loadingState, setLoadingState } = useContext(StudentContext)
 
   const navigate = useNavigate()
+
+  const { authState } = useContext(AuthContext)
 
   function handleFilterOnChange(getSectionId, getCurrentOption) {
     let copyFilters = { ...filters }
@@ -69,6 +72,20 @@ const StudentViewCoursesPage = () => {
       setStudentViewCoursesList(response?.data)
       setLoadingState(false)
     }
+  }
+
+  async function handleCourseNavigate(getCurrentCourseId) {
+    const response = await checkCoursePurchaseInfoService(getCurrentCourseId, authState?.user?._id)
+
+    if (response?.success) {
+      if (response?.data) {
+        navigate(`/course-progress/${getCurrentCourseId}`)
+      } else {
+        navigate(`/courses/details/${getCurrentCourseId}`)
+      }
+    }
+
+    // console.log(response)
   }
 
   useEffect(() => {
@@ -156,7 +173,7 @@ const StudentViewCoursesPage = () => {
             {
               studentViewCoursesList && studentViewCoursesList.length > 0 ?
                 studentViewCoursesList.map((courseItem, index) => (
-                  <Card onClick={() => navigate(`/courses/details/${courseItem?._id}`)} className="cursor-pointer" key={index}>
+                  <Card onClick={() => handleCourseNavigate(courseItem?._id)} className="cursor-pointer" key={index}>
                     <CardContent className="flex gap-4 p-4">
                       <div className='w-48 h-32 flex-shrink-0'>
                         <img src={courseItem?.image} className='w-full h-full object-cover' alt="" />

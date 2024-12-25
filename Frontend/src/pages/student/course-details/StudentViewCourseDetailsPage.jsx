@@ -5,10 +5,10 @@ import { Skeleton } from "@/components/ui/skeleton"
 import VideoPlayer from "@/components/video-player/VideoPlayer"
 import { AuthContext } from "@/context/auth-context/AuthContext"
 import { StudentContext } from "@/context/student-context/StudentContext"
-import { createPaymentService, fetchStudentViewCourseDetailsService } from "@/services/services"
+import { checkCoursePurchaseInfoService, createPaymentService, fetchStudentViewCourseDetailsService } from "@/services/services"
 import { CheckCircle, Globe, Lock, PlayCircle } from "lucide-react"
 import { useContext, useEffect, useState } from "react"
-import { useLocation, useParams } from "react-router-dom"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 
 
 const StudentViewCourseDetailsPage = () => {
@@ -30,11 +30,23 @@ const StudentViewCourseDetailsPage = () => {
 
     const [approvalUrl, setApprovalUrl] = useState("")
 
+    const navigate = useNavigate()
+
     const { id } = useParams()
 
     const location = useLocation()
 
     async function fetchStudentViewCourseDetails() {
+
+        const checkCoursePurchaseInfoResponse = await checkCoursePurchaseInfoService(currentCourseDetailsId, authState?.user?._id)
+
+        // console.log(checkCoursePurchaseInfoResponse)
+
+        if (checkCoursePurchaseInfoResponse?.success && checkCoursePurchaseInfoResponse?.data) {
+            navigate(`/course-progress/${currentCourseDetailsId}`)
+            return
+        }
+
         const response = await fetchStudentViewCourseDetailsService(currentCourseDetailsId)
 
         if (response?.success) {
