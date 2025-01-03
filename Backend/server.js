@@ -22,12 +22,13 @@ app.use('/instructor/course', require('./routes/instructor/course'))
 app.use('/student/course', require('./routes/student/course'))
 app.use('/student/order', require('./routes/student/order'))
 app.use('/student/courses-bought', require('./routes/student/studentCourses'))
+app.use('/student/course-progress', require('./routes/student/courseProgress'))
 
-app.use((err,req,res,next) => {
+app.use((err, req, res, next) => {
     console.log(err.stack)
     res.status(500).json({
         success: false,
-        message: "Something Went Wrong", 
+        message: "Something Went Wrong",
     })
 })
 

@@ -24,14 +24,14 @@ const StudentHeader = () => {
                     <span className="font-extrabold md:text-xl text-[14px]">Online Learning Platform</span>
                 </Link>
                 <div className="flex items-center space-x-1">
-                    <Button variant="ghost" onClick={() => navigate('/courses')} className="text-[14px] md:text-[16px] font-medium">
+                    <Button variant="ghost" onClick={()=>{location.pathname.includes('/courses') ? null : navigate('/courses')}} className="text-[14px] md:text-[16px] font-medium">
                         Explore Courses
                     </Button>
                 </div>
             </div>
             <div className="flex items-center space-x-4">
                 <div className="flex gap4 items-center">
-                    <div onClick={()=>navigate('/student-courses')} className="flex cursor-pointer items-center gap-3">
+                    <div onClick={() => navigate('/student-courses')} className="flex cursor-pointer items-center gap-3">
                         <span className="font-extrabold md:text-xl text-[14px]">My Courses</span>
                         <TvMinimalPlay className="w-8 h-8 cursor-pointer" />
                     </div>

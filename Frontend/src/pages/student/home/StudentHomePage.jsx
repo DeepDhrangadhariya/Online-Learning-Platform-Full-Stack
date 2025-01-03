@@ -3,17 +3,49 @@ import banner from '../../../assets/banner-img.png'
 import { courseCategories } from '@/config/Config'
 import { Button } from '@/components/ui/button'
 import { StudentContext } from '@/context/student-context/StudentContext'
-import { fetchStudentViewCourseListService } from '@/services/services'
+import { checkCoursePurchaseInfoService, fetchStudentViewCourseListService } from '@/services/services'
+import { AuthContext } from '@/context/auth-context/AuthContext'
+import { useNavigate } from 'react-router-dom'
 
 function StudentHomePage() {
 
   const { studentViewCoursesList, setStudentViewCoursesList } = useContext(StudentContext)
+
+  const { authState } = useContext(AuthContext)
+  
+  const navigate = useNavigate()
+
+  function handleNavigateToCoursesPage(getCurrentId) {
+    // console.log(getCurrentId)
+    sessionStorage.removeItem('filters')
+    const currentFilter = {
+      category: [getCurrentId]
+    }
+
+    sessionStorage.setItem('filters', JSON.stringify(currentFilter))
+
+    navigate('/courses')
+  }
 
   async function fetchAllStudentViewCourses() {
     const response = await fetchStudentViewCourseListService()
 
     if (response?.success) {
       setStudentViewCoursesList(response?.data)
+    }
+
+    // console.log(response)
+  }
+
+  async function handleCourseNavigate(getCurrentCourseId) {
+    const response = await checkCoursePurchaseInfoService(getCurrentCourseId, authState?.user?._id)
+
+    if (response?.success) {
+      if (response?.data) {
+        navigate(`/course-progress/${getCurrentCourseId}`)
+      } else {
+        navigate(`/courses/details/${getCurrentCourseId}`)
+      }
     }
 
     // console.log(response)
@@ -49,6 +81,7 @@ function StudentHomePage() {
                 className="justify-start"
                 variant="outline"
                 key={categoryItem.id}
+                onClick={()=>handleNavigateToCoursesPage(categoryItem.id)}
               >
                 {categoryItem.label}
               </Button>
@@ -61,7 +94,7 @@ function StudentHomePage() {
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6'>
           {
             studentViewCoursesList && studentViewCoursesList.length > 0 ?
-              studentViewCoursesList.map((courseItem, index) => <div className='border rounded-lg overflow-hidden shadow cursor-pointer' key={index}>
+              studentViewCoursesList.map((courseItem, index) => <div onClick={()=>handleCourseNavigate(courseItem?._id)} className='border rounded-lg overflow-hidden shadow cursor-pointer' key={index}>
                 <img
                   src={courseItem?.image}
                   width={300}

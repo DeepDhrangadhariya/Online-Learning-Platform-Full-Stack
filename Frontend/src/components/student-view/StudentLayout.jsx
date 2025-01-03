@@ -1,12 +1,19 @@
 import React from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 import StudentHeader from './StudentHeader'
 
 function StudentLayout() {
+
+  const location = useLocation()
+
   return (
     <div>
-      <StudentHeader/>
-      <Outlet/>
+      {
+        !location.pathname.includes('course-progress') ?
+          <StudentHeader /> :
+          null
+      }
+      <Outlet />
     </div>
   )
 }
