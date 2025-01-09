@@ -14,6 +14,7 @@ import StudentViewCourseDetailsPage from './pages/student/course-details/Student
 import PaypalPaymentReturnPage from './pages/student/payment-return/PaypalPaymentReturnPage'
 import StudentCoursesPage from './pages/student/student-courses/StudentCoursesPage'
 import StudentViewCourseProgressPage from './pages/student/course-progress/StudentViewCourseProgressPage'
+import Notification from './components/notification/Notification'
 
 function App() {
 
@@ -82,7 +83,7 @@ function App() {
         </Route>
         <Route path='*' element={<NotFoundPage />} />
       </Routes>
-
+      <Notification/>
     </>
   )
 }

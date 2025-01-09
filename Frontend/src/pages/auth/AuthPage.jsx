@@ -6,6 +6,7 @@ import { AuthContext } from '@/context/auth-context/AuthContext'
 import { GraduationCap } from 'lucide-react'
 import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 function AuthPage() {
   const [activeTab, setActiveTab] = useState('signin')
@@ -39,6 +40,10 @@ function AuthPage() {
       signUpFormData.password != ''
     )
   }
+
+  console.log({toast})
+  toast.info("You Can Try Demo Admin Account Email: admin@gmail.com Password: admin123")
+  toast.info("Login With Student Account For Student Page")
 
   // console.log(signInFormData)
 

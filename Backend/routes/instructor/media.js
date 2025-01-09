@@ -1,10 +1,10 @@
 const express = require('express');
 const multer = require('multer')
-const {uploadMediaToCloudianary, deleteMediaFromCloudinary} = require('../../helpers/cloudinary')
+const { uploadMediaToCloudianary, deleteMediaFromCloudinary } = require('../../helpers/cloudinary')
 
 const router = express.Router()
 
-const upload = multer({dest: 'uploads/'})
+const upload = multer({ dest: 'uploads/' })
 
 router.post('/upload', upload.single('file'), async (req, res) => {
     try {
@@ -23,11 +23,11 @@ router.post('/upload', upload.single('file'), async (req, res) => {
     }
 })
 
-router.delete('/delete/:id', async(req, res) => {
+router.delete('/delete/:id', async (req, res) => {
     try {
-        const {id} =  req.params
+        const { id } = req.params
 
-        if(!id) {
+        if (!id) {
             res.status(400).json({
                 success: false,
                 message: 'Asset Id Is Required'
@@ -53,7 +53,7 @@ router.delete('/delete/:id', async(req, res) => {
 router.post('/bulk-upload', upload.array('files', 10), async (req, res) => {
     try {
 
-        const uploadPromises = req.files.map(fileItem=> uploadMediaToCloudianary(fileItem.path))
+        const uploadPromises = req.files.map(fileItem => uploadMediaToCloudianary(fileItem.path))
 
         const results = await Promise.all(uploadPromises)
 
@@ -61,7 +61,7 @@ router.post('/bulk-upload', upload.array('files', 10), async (req, res) => {
             success: true,
             data: results
         })
-        
+
     } catch (error) {
         console.log("Error In Bulk Uploading, ", error)
         res.status(500).json({

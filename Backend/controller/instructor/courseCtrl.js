@@ -1,3 +1,4 @@
+const { deleteMediaFromCloudinary, deleteAllMediaFromCloudinary } = require("../../helpers/cloudinary")
 const courseSchema = require("../../model/courseSchema")
 
 module.exports.addNewCourse = async (req, res) => {
@@ -103,3 +104,35 @@ module.exports.updateCourseById = async (req, res) => {
         })
     }
 }
+
+module.exports.deleteCourse = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const course = await courseSchema.findById(id);
+        if (!course) {
+            return res.status(404).json({ message: "Course not found" });
+        }
+
+        const mediaDeletionResults = [];
+        for (const curriculumItem of course.curriculum) {
+            const result = await deleteAllMediaFromCloudinary(curriculumItem.public_id);
+            mediaDeletionResults.push(result);
+        }
+
+        const failedDeletions = mediaDeletionResults.filter(result => !result.success);
+        if (failedDeletions.length) {
+            return res.status(500).json({
+                message: "Failed to delete some media files",
+                failedDeletions,
+            });
+        }
+
+        await courseSchema.findByIdAndDelete(id);
+
+        res.status(200).json({success: true, message: "Course and media files deleted successfully" });
+    } catch (error) {
+        console.error("Error deleting course:", error);
+        res.status(500).json({success: false, message: "Error deleting course:", error });
+    }
+};

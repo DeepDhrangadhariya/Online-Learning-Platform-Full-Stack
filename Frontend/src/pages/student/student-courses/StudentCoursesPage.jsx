@@ -7,6 +7,7 @@ import { fetchStudentBoughtCoursesService } from "@/services/services"
 import { Watch } from "lucide-react"
 import { useContext, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
 
 
 const StudentCoursesPage = () => {
@@ -23,17 +24,21 @@ const StudentCoursesPage = () => {
     const navigate = useNavigate()
 
     async function fetchStudentBoughtCourses() {
-        const response = await fetchStudentBoughtCoursesService(authState?.user?._id)
-
-        if (response?.success) {
-            setStudentBoughtCoursesList(response?.data)
-            setLoadingState(false)
-
-            // console.log(response)
-            // console.log(response.success)
-            // console.log(response.data)
-        } else {
-            setLoadingState(false)
+        try {
+            const response = await fetchStudentBoughtCoursesService(authState?.user?._id)
+    
+            if (response?.success) {
+                setStudentBoughtCoursesList(response?.data)
+                setLoadingState(false)
+    
+                // console.log(response)
+                // console.log(response.success)
+                // console.log(response.data)
+            } else {
+                setLoadingState(false)
+            }
+        } catch (error) {
+            toast.error(error.response.data.message)
         }
     }
 

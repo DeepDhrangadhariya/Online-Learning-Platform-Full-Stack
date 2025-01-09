@@ -27,4 +27,14 @@ const deleteMediaFromCloudinary = async(publicId)=> {
     }
 }
 
-module.exports = {uploadMediaToCloudianary, deleteMediaFromCloudinary}
+const deleteAllMediaFromCloudinary = async(publicId)=> {
+    try {
+        const result = await cloudinary.uploader.destroy(publicId)
+        return { success: true, result };
+    } catch (error) {
+        console.log("Failed To Delete Assest From Cloudinary, ", error)
+        throw new Error('Failed To Delete Assest From Cloudinary')
+    }
+}
+
+module.exports = {uploadMediaToCloudianary, deleteMediaFromCloudinary, deleteAllMediaFromCloudinary}

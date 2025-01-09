@@ -64,6 +64,12 @@ export async function updateCourseByIdService(id, formData) {
     return data
 }
 
+export async function deleteCourseByIdService(id) {
+    const { data } = await axiosInstance.delete(`/instructor/course/delete/${id}`)
+
+    return data
+}
+
 export async function mediaBulkUploadService(formData, onProgressCallback) {
     const { data } = await axiosInstance.post("/media/bulk-upload", formData, {
         onUploadProgress: (progressEvent) => {
@@ -109,8 +115,8 @@ export async function fetchStudentBoughtCoursesService(studentId) {
     return data
 }
 
-export async function checkCoursePurchaseInfoService(CourseId, studentId) {
-    const { data } = await axiosInstance.get(`/student/course/purchase-info/${CourseId}/${studentId}`)
+export async function checkCoursePurchaseInfoService(courseId, studentId) {
+    const { data } = await axiosInstance.get(`/student/course/purchase-info/${courseId}/${studentId}`)
 
     return data
 }

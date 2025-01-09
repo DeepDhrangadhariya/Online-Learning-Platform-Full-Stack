@@ -7,19 +7,38 @@ import { instructorContext } from '@/context/instructor-context/InstructorContex
 import { fetchInstructorCourseListService } from '@/services/services'
 import { BarChart, Book, LogOut } from 'lucide-react'
 import React, { useContext, useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 
 
 function InstructorDashboardPage() {
   
   const [activeTab, setActiveTab] = useState('dashboard')
   const { resetCredentials } = useContext(AuthContext)
+  const {authState} = useContext(AuthContext)
   const {instructorCoursesList, setInstructorCoursesList} = useContext(instructorContext)
 
   async function fetchAllCourses() {
-    const response = await fetchInstructorCourseListService()
-
-    // console.log(response)
-    if(response?.success) setInstructorCoursesList(response?.data)
+    try {
+      const response = await fetchInstructorCourseListService()
+  
+      // console.log(authState.user._id)
+  
+      // console.log(response)
+  
+      if (response?.success) {
+        const filteredCourses = response?.data?.filter(
+          (item) => item.instructorId === authState.user._id
+        )
+        // console.log(filteredCourses)
+        setInstructorCoursesList(filteredCourses)
+      }
+  
+      //   if (response?.success) {
+      //   setInstructorCoursesList(response?.data)
+      // }
+    } catch (error) {
+      toast.error(error.response.data.message)
+    }
   }
 
   useEffect(() => {
@@ -31,7 +50,7 @@ function InstructorDashboardPage() {
       icon: BarChart,
       label: 'Dashboard',
       value: 'dashboard',
-      component: <InstructorDashboard />
+      component: <InstructorDashboard listOfCourses={instructorCoursesList} />
     },
     {
       icon: Book,

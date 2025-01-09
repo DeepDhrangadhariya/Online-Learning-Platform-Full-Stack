@@ -10,6 +10,7 @@ import { mediaBulkUploadService, mediaDeleteService, mediaUploadService } from '
 import { Label } from '@radix-ui/react-dropdown-menu'
 import { Upload } from 'lucide-react'
 import React, { useContext, useRef } from 'react'
+import { toast } from 'react-toastify'
 
 const CourseCurriculum = () => {
 
@@ -79,6 +80,7 @@ const CourseCurriculum = () => {
                 // console.log(response, 'response')
             } catch (error) {
                 console.log(error)
+                toast.error(error.response.data.message)
             }
         }
     }
@@ -87,7 +89,8 @@ const CourseCurriculum = () => {
         let copyCourseCurriculumFormData = [...courseCurriculumFormData]
         const getCurrentVideoPublicId = copyCourseCurriculumFormData[currentIndex].public_id
 
-        const deleteCurrentMediaResponse = await mediaDeleteService(getCurrentVideoPublicId)
+        try {
+            const deleteCurrentMediaResponse = await mediaDeleteService(getCurrentVideoPublicId)
 
         if (deleteCurrentMediaResponse?.success) {
             copyCourseCurriculumFormData[currentIndex] = {
@@ -96,6 +99,9 @@ const CourseCurriculum = () => {
                 public_id: ''
             }
             setCourseCurriculumFormData(copyCourseCurriculumFormData)
+        }
+        } catch (error) {
+            toast.error(error.response.data.message)
         }
     }
 
@@ -163,6 +169,7 @@ const CourseCurriculum = () => {
 
         } catch (error) {
             console.log(error)
+            toast.error(error.response.data.message)
         }
 
         // console.log(selectedFiles)
@@ -172,13 +179,18 @@ const CourseCurriculum = () => {
         let copyCourseCurriculumFormData = [...courseCurriculumFormData]
         const getCurrentSelectedVideoPublicId = copyCourseCurriculumFormData[currentIndex].public_id
 
-        const response = await mediaDeleteService(getCurrentSelectedVideoPublicId)
-
-        if (response?.success) {
-            copyCourseCurriculumFormData = copyCourseCurriculumFormData.filter((_, index) => index !== currentIndex)
-
-            setCourseCurriculumFormData(copyCourseCurriculumFormData)
+        try {
+            const response = await mediaDeleteService(getCurrentSelectedVideoPublicId)
+    
+            if (response?.success) {
+                copyCourseCurriculumFormData = copyCourseCurriculumFormData.filter((_, index) => index !== currentIndex)
+    
+                setCourseCurriculumFormData(copyCourseCurriculumFormData)
+            }
+        } catch (error) {
+            toast.error(error.response.data.message)
         }
+
 
         // console.log("copyCourseCurriculumFormData, ", copyCourseCurriculumFormData[currentIndex])
     }

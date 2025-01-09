@@ -5,6 +5,7 @@ import { Label } from '@/components/ui/label'
 import { instructorContext } from '@/context/instructor-context/InstructorContext'
 import { mediaUploadService } from '@/services/services'
 import React, { useContext } from 'react'
+import { toast } from 'react-toastify'
 
 const CourseSettings = () => {
 
@@ -41,6 +42,7 @@ const CourseSettings = () => {
         }
       } catch (error) {
         console.log(error)
+        toast.error(error.response.data.message)
       }
     }
   }

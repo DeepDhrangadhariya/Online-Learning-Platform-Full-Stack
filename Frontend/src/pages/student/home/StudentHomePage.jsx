@@ -6,6 +6,7 @@ import { StudentContext } from '@/context/student-context/StudentContext'
 import { checkCoursePurchaseInfoService, fetchStudentViewCourseListService } from '@/services/services'
 import { AuthContext } from '@/context/auth-context/AuthContext'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 function StudentHomePage() {
 
@@ -28,27 +29,35 @@ function StudentHomePage() {
   }
 
   async function fetchAllStudentViewCourses() {
-    const response = await fetchStudentViewCourseListService()
-
-    if (response?.success) {
-      setStudentViewCoursesList(response?.data)
+    try {
+      const response = await fetchStudentViewCourseListService()
+  
+      if (response?.success) {
+        setStudentViewCoursesList(response?.data)
+      }
+  
+      // console.log(response)
+    } catch (error) {
+      toast.error(error.response.data.message)
     }
-
-    // console.log(response)
   }
 
   async function handleCourseNavigate(getCurrentCourseId) {
-    const response = await checkCoursePurchaseInfoService(getCurrentCourseId, authState?.user?._id)
-
-    if (response?.success) {
-      if (response?.data) {
-        navigate(`/course-progress/${getCurrentCourseId}`)
-      } else {
-        navigate(`/courses/details/${getCurrentCourseId}`)
+    try {
+      const response = await checkCoursePurchaseInfoService(getCurrentCourseId, authState?.user?._id)
+  
+      if (response?.success) {
+        if (response?.data) {
+          navigate(`/course-progress/${getCurrentCourseId}`)
+        } else {
+          navigate(`/courses/details/${getCurrentCourseId}`)
+        }
       }
+  
+      // console.log(response)
+    } catch (error) {
+      toast.error(error.response.data.message)
     }
-
-    // console.log(response)
   }
   
   useEffect(() => {
@@ -99,7 +108,7 @@ function StudentHomePage() {
                   src={courseItem?.image}
                   width={300}
                   height={150}
-                  className='w-full h-40 object-cover'
+                  className='w-full h-40 object-cover' 
                   alt=""
                 />
                 <div className='p-4'>

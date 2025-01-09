@@ -10,6 +10,7 @@ import { instructorContext } from '@/context/instructor-context/InstructorContex
 import { addNewCourseService, fetchInstructorCourseDetailsService, updateCourseByIdService } from '@/services/services'
 import React, { useContext, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const AddNewCoursePage = () => {
 
@@ -58,7 +59,7 @@ const AddNewCoursePage = () => {
       }
     }
 
-    return hasFreePreview
+    return hasFreePreview && toast.info("Select At Least One Free Preview Lecture Before Submit")
   }
 
   async function handleCreateCourse() {
@@ -72,47 +73,56 @@ const AddNewCoursePage = () => {
       isPublised: true,
     }
 
-    const response =
-      currentEditedCourseId !== null ?
-      await updateCourseByIdService(currentEditedCourseId, courseFinalFormdata) :
-      await addNewCourseService(courseFinalFormdata)
+    try {
+      const response =
+        currentEditedCourseId !== null ?
+        await updateCourseByIdService(currentEditedCourseId, courseFinalFormdata) :
+        await addNewCourseService(courseFinalFormdata)
+  
+      if (response?.success) {
+        setCourseLandingFormData(courseLandingInitialFormData)
+        setCourseCurriculumFormData(courseCurriculumInitialFormData)
+        setCurrentEditedCourseId(null)
+        toast.success(response.message)
 
-    if (response?.success) {
-      setCourseLandingFormData(courseLandingInitialFormData)
-      setCourseCurriculumFormData(courseCurriculumInitialFormData)
-      setCurrentEditedCourseId(null)
-
-      if (window.history.length > 1) {
-        navigate(-1)
-      } else {
-        navigate('/instructor') // Fallback to a safe route
+        if (window.history.length > 1) {
+          navigate(-1)
+        } else {
+          navigate('/instructor') // Fallback to a safe route
+        }
+  
+        // navigate(-1)
+        // navigate('/instructor')
+        // navigate(back)
       }
-
-      // navigate(-1)
-      // navigate('/instructor')
-      // navigate(back)
+      // console.log(window.history)
+      // console.log("CourseFinalFormData, ", courseFinalFormdata)
+    } catch (error) {
+      toast.error(error.response.data.message)
     }
-    // console.log(window.history)
-    // console.log("CourseFinalFormData, ", courseFinalFormdata)
   }
 
   async function fetchCurrentCourseDetails() {
-    const response = await fetchInstructorCourseDetailsService(currentEditedCourseId)
-
-    if (response?.success) {
-      const setCourseFormData = Object.keys(courseLandingInitialFormData).reduce((acc, key) => {
-        acc[key] = response?.data[key] || courseLandingInitialFormData[key]
-
-        return acc
-      }, {})
-
-      // console.log(setCourseFormData, response?.data)
-
-      setCourseLandingFormData(setCourseFormData)
-      setCourseCurriculumFormData(response?.data?.curriculum)
+    try {
+      const response = await fetchInstructorCourseDetailsService(currentEditedCourseId)
+  
+      if (response?.success) {
+        const setCourseFormData = Object.keys(courseLandingInitialFormData).reduce((acc, key) => {
+          acc[key] = response?.data[key] || courseLandingInitialFormData[key]
+  
+          return acc
+        }, {})
+  
+        // console.log(setCourseFormData, response?.data)
+  
+        setCourseLandingFormData(setCourseFormData)
+        setCourseCurriculumFormData(response?.data?.curriculum)
+      }
+  
+      // console.log(response, "Response")
+    } catch (error) {
+      toast.error(error.response.data.message)
     }
-
-    // console.log(response, "Response")
   }
 
   useEffect(() => {

@@ -9,4 +9,6 @@ routes.post("/add", courseCtrl.addNewCourse)
 
 routes.put("/update/:id", courseCtrl.updateCourseById)
 
+routes.delete('/delete/:id', courseCtrl.deleteCourse)
+
 module.exports = routes;

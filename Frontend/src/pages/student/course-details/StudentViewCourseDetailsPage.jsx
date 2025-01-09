@@ -9,6 +9,7 @@ import { checkCoursePurchaseInfoService, createPaymentService, fetchStudentViewC
 import { CheckCircle, Globe, Lock, PlayCircle } from "lucide-react"
 import { useContext, useEffect, useState } from "react"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
+import { toast } from "react-toastify"
 
 
 const StudentViewCourseDetailsPage = () => {
@@ -37,27 +38,34 @@ const StudentViewCourseDetailsPage = () => {
     const location = useLocation()
 
     async function fetchStudentViewCourseDetails() {
-
-        const checkCoursePurchaseInfoResponse = await checkCoursePurchaseInfoService(currentCourseDetailsId, authState?.user?._id)
-
-        // console.log(checkCoursePurchaseInfoResponse)
-
-        if (checkCoursePurchaseInfoResponse?.success && checkCoursePurchaseInfoResponse?.data) {
-            navigate(`/course-progress/${currentCourseDetailsId}`)
-            return
+        try {
+            const checkCoursePurchaseInfoResponse = await checkCoursePurchaseInfoService(currentCourseDetailsId, authState?.user?._id)
+    
+            // console.log(checkCoursePurchaseInfoResponse)
+    
+            if (checkCoursePurchaseInfoResponse?.success && checkCoursePurchaseInfoResponse?.data) {
+                navigate(`/course-progress/${currentCourseDetailsId}`)
+                return
+            }
+        } catch (error) {
+            toast.error(error.response.data.message)
         }
-
-        const response = await fetchStudentViewCourseDetailsService(currentCourseDetailsId)
-
-        if (response?.success) {
-            setStudentViewCourseDetails(response?.data)
-            setLoadingState(false)
-        } else {
-            setStudentViewCourseDetails(null)
-            setLoadingState(false)
+        
+        try {
+            const response = await fetchStudentViewCourseDetailsService(currentCourseDetailsId)
+    
+            if (response?.success) {
+                setStudentViewCourseDetails(response?.data)
+                setLoadingState(false)
+            } else {
+                setStudentViewCourseDetails(null)
+                setLoadingState(false)
+            }
+    
+            // console.log(response)
+        } catch (error) {
+            toast.error(error.response.data.message)
         }
-
-        // console.log(response)
     }
 
     // console.log(id)
@@ -86,14 +94,19 @@ const StudentViewCourseDetailsPage = () => {
             coursePricing: studentViewCourseDetails?.pricing,
         }
 
-        console.log(paymentPayload)
+        // console.log(paymentPayload)
 
-        const response = await createPaymentService(paymentPayload)
-
-        console.log(response)
-        if (response?.success) {
-            sessionStorage.setItem('currentOrderId', JSON.stringify(response?.data?.orderId))
-            setApprovalUrl(response?.data?.approveUrl)
+        try {
+            const response = await createPaymentService(paymentPayload)
+    
+            // console.log(response)
+    
+            if (response?.success) {
+                sessionStorage.setItem('currentOrderId', JSON.stringify(response?.data?.orderId))
+                setApprovalUrl(response?.data?.approveUrl)
+            }
+        } catch (error) {
+            toast.error(error.response.data.message)
         }
 
     }
@@ -144,7 +157,7 @@ const StudentViewCourseDetailsPage = () => {
                     </span>
                     <span>{studentViewCourseDetails?.students.length} {studentViewCourseDetails?.students.length <= 1 ? 'Student' : 'Students'}</span>
                 </div>
-                {/* <p className="text-xl mt-2">{studentViewCourseDetails?.description}</p> */}
+                <p className="text-xl mt-2">{studentViewCourseDetails?.welcomeMessage}</p>
             </div>
             <div className="flex flex-col md:flex-row gap-8 mt-8">
                 <main className="flex-grow">

@@ -101,13 +101,27 @@ module.exports.checkCoursePurchaseInfo = async (req, res) => {
 
         const { id, studentId } = req.params
 
+        // console.log(id)
+        // console.log(studentId)
+
         const studentCourses = await studentCoursesShema.findOne({
             userId: studentId
         })
 
+        if (!studentCourses) {
+            // console.log(studentCourses)
+            return res.status(200).json({
+                success: true,
+                message: "Course Details Found",
+                data: false
+            })
+        }
+
+        // console.log(studentCourses)
+
         const ifStudentAlreadyBoughtCurrentCourse = studentCourses.courses.findIndex(item => item.courseId === id) > -1
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             message: "Course Details Found",
             data: ifStudentAlreadyBoughtCurrentCourse

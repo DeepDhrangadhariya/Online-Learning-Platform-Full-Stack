@@ -11,6 +11,7 @@ import { checkCoursePurchaseInfoService, fetchStudentViewCourseListService } fro
 import { ArrowUpDownIcon } from 'lucide-react'
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 function createSearchParamsHelper(filterParams) {
   const queryParams = []
@@ -67,25 +68,33 @@ const StudentViewCoursesPage = () => {
       ...filters,
       sortBy: sort
     })
-    const response = await fetchStudentViewCourseListService(query)
-    if (response?.success) {
-      setStudentViewCoursesList(response?.data)
-      setLoadingState(false)
+    try {
+      const response = await fetchStudentViewCourseListService(query)
+      if (response?.success) {
+        setStudentViewCoursesList(response?.data)
+        setLoadingState(false)
+      }
+    } catch (error) {
+      toast.error(error.response.data.message)
     }
   }
 
   async function handleCourseNavigate(getCurrentCourseId) {
-    const response = await checkCoursePurchaseInfoService(getCurrentCourseId, authState?.user?._id)
-
-    if (response?.success) {
-      if (response?.data) {
-        navigate(`/course-progress/${getCurrentCourseId}`)
-      } else {
-        navigate(`/courses/details/${getCurrentCourseId}`)
+    try {
+      const response = await checkCoursePurchaseInfoService(getCurrentCourseId, authState?.user?._id)
+  
+      if (response?.success) {
+        if (response?.data) {
+          navigate(`/course-progress/${getCurrentCourseId}`)
+        } else {
+          navigate(`/courses/details/${getCurrentCourseId}`)
+        }
       }
+  
+      // console.log(response)
+    } catch (error) {
+      toast.error(error.response.data.message)
     }
-
-    // console.log(response)
   }
 
   useEffect(() => {

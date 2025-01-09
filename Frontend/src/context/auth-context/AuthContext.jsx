@@ -2,6 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { initialSignInFormData, initialSignUpFormData } from "@/config/Config";
 import { checkAuthService, loginService, registerService } from "@/services/services";
 import { createContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export const AuthContext = createContext(null)
 
@@ -17,24 +18,40 @@ export default function AuthProvider({children}) {
 
     async function handleRegisterUser(event) {
         event.preventDefault()
-        const data = await registerService(signUpFormData)
+        try {
+            const data = await registerService(signUpFormData)
+            if (data.success) {
+                toast.success(data.message)
+            }
+        } catch (error) {
+            toast.error(error.response.data.message)
+        }
     }
 
     async function handleLoginUser(event) {
         event.preventDefault()
-        const data = await loginService(signInFormData)
-
-        if(data.success) {
-            sessionStorage.setItem('accessToken', JSON.stringify(data.data.accessToken))
-            setAuthState({
-                authenticate: true,
-                user: data.data.user
-            })
-        } else {
+        try {
+            const data = await loginService(signInFormData)
+    
+            if(data.success) {
+                sessionStorage.setItem('accessToken', JSON.stringify(data.data.accessToken))
+                setAuthState({
+                    authenticate: true,
+                    user: data.data.user
+                })
+                toast.success(data.message)
+            } else {
+                setAuthState({
+                    authenticate: false,
+                    user: null
+                })
+            }
+        } catch (error) {
             setAuthState({
                 authenticate: false,
-                user: null
-            })
+                user: null,
+            });
+            toast.error(error.response.data.message || "Error At Login")
         }
     }
 
@@ -62,6 +79,7 @@ export default function AuthProvider({children}) {
                     user: null
                 })
                 setLoading(false)
+                toast.error(error.response.data.message)
             }
         }
     }
