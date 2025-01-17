@@ -42,7 +42,7 @@ function AuthPage() {
   }
 
   useEffect(() => {
-    return toast.info("Demo Admin Account Email: admin@gmail.com Password: admin123")
+    toast.info("Demo Admin Account Email: admin@gmail.com Password: admin123")
   },[])
   // console.log({toast})
 
