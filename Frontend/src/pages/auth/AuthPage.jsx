@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { AuthContext } from '@/context/auth-context/AuthContext'
 import { GraduationCap } from 'lucide-react'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
@@ -41,7 +41,7 @@ function AuthPage() {
     )
   }
 
-  useState(() => {
+  useEffect(() => {
     return toast.info("Demo Admin Account Email: admin@gmail.com Password: admin123")
   },[])
   // console.log({toast})
