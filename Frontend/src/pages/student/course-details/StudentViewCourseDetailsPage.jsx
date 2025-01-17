@@ -57,6 +57,7 @@ const StudentViewCourseDetailsPage = () => {
             if (response?.success) {
                 setStudentViewCourseDetails(response?.data)
                 setLoadingState(false)
+                toast.info("Use This PayPal Account For Payment, Email: sb-lkjzy35346183@personal.example.com Password: Qj1q{H}+")
             } else {
                 setStudentViewCourseDetails(null)
                 setLoadingState(false)
