@@ -236,7 +236,7 @@ const CourseCurriculum = () => {
                     {
                         courseCurriculumFormData.map((curriculumItem, index) => (
                             <div className='border p-5 rounded-md' key={index}>
-                                <div className='flex gap-5 items-center'>
+                                <div className='flex gap-5 items-center flex-col md:flex-row'>
                                     <h3 className='font-semibold'> Lectures {index + 1}</h3>
                                     <Input
                                         name={`title-${index + 1}`}
@@ -259,14 +259,14 @@ const CourseCurriculum = () => {
                                 <div className='mt-6'>
                                     {
                                         courseCurriculumFormData[index]?.videoUrl ?
-                                            <div className='flex gap-3'>
+                                            <div className='flex md:gap-3 '>
                                                 <VideoPlayer
                                                     url={courseCurriculumFormData[index]?.videoUrl}
                                                     width='400px'
                                                     height='200px'
                                                 />
-                                                <Button onClick={() => handleReplaceVideo(index)} >Replace Video</Button>
-                                                <Button onClick={() => handleDeleteLecture(index)} className="bg-red-900">Delete Lecture</Button>
+                                                <Button onClick={() => handleReplaceVideo(index)} className="mt-2 mr-1 ms-[-10px] md:mr-0 md:ms-0" >Replace Video</Button>
+                                                <Button onClick={() => handleDeleteLecture(index)} className="bg-red-900 mt-2">Delete Lecture</Button>
                                             </div> :
                                             <Input
                                                 type="file"

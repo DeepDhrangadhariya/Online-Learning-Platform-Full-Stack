@@ -84,9 +84,9 @@ const InstructorCourses = ({ listOfCourses }) => {
     return (
         <Card>
             <CardHeader className="flex justify-between flex-row items-center">
-                <CardTitle className="text-3xl font-extrabold">All Courses</CardTitle>
+                <CardTitle className="md:text-3xl font-extrabold">All Courses</CardTitle>
                 <Button
-                    className="p-6"
+                    className="p-2 md:p-6"
                     onClick={() => navigate('/instructor/create-new-course')}
                 >
                     Create New Course

@@ -18,13 +18,13 @@ const StudentHeader = () => {
 
     return (
         <header className="flex items-center justify-between p-4 border-b gap-4 relative">
-            <div className="flex items-center space-x-4">
-                <Link to='/home' className="flex items-center hover:text-black">
-                    <GraduationCap className="h-8 w-8 mr-4" />
+            <div className="flex items-center md:gap-2">
+                <Link to='/home' className="flex items-center hover:text-black md:gap-2">
+                    <GraduationCap className="h-8 w-8"/>
                     <span className="font-extrabold md:text-xl text-[14px] text-center">Online Learning Platform</span>
                 </Link>
                 <div className="flex items-center space-x-1">
-                    <Button variant="ghost" onClick={()=>{location.pathname.includes('/courses') ? null : navigate('/courses')}} className="text-[12px] md:text-[16px] font-medium">
+                    <Button variant="ghost" onClick={()=>{location.pathname.includes('/courses') ? null : navigate('/courses')}} className="text-[10px] md:text-[16px] font-medium text-center">
                         Explore Courses
                     </Button>
                 </div>

@@ -73,9 +73,9 @@ function InstructorDashboardPage() {
 
   return (
     <div className='flex h-full min-h-screen bg-gray-100'>
-      <aside className='w-64 bg-white shadow-md hidden md:block'>
-        <div className="p-4">
-          <h2 className='text-2xl font-bold mb-4'>Instructor View</h2>
+      <aside className='w-12 md:w-64 bg-white shadow-md md:block'>
+        <div className="p-2 md:p-4">
+          <h2 className='hidden md:block md:text-2xl font-bold mb-4'>Instructor View</h2>
           <nav>
             {
               menuItems.map(menuItem=><Button
@@ -86,8 +86,8 @@ function InstructorDashboardPage() {
                 handleLogout : ()=>setActiveTab(menuItem.value)
               }
               >
-                <menuItem.icon className='mr-2 h-4 w-4' />
-                {menuItem.label}
+                <menuItem.icon className='ml-[-5px] md:ml-0 mr-2 h-4 w-4' />
+                <span className='hidden md:block'>{menuItem.label}</span>
               </Button>)
             }
           </nav>
